@@ -1,14 +1,11 @@
-﻿using Application.Service.Token;
+﻿using Application.Requests.Commands.Authorize_User;
+using Application.Requests.Commands.ForgotPassword;
 using Application.Service;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+using Application.Service.Token;
 using Application.Service.URL_API;
-
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 namespace Application
 {
     public static class DependencyInjection
@@ -21,6 +18,9 @@ namespace Application
             services.AddSingleton<URL_User_NPS>();
             services.AddSingleton<GlobalQuery>();
             services.AddTransient<ITokenService, TokenService>();
+
+            services.AddTransient<IValidator<ForgotPas.Command>, ForgotPas.Validation>();
+            services.AddTransient<IValidator<User_Authorize.Command>, Auth_User_Validation>();
             return services;
         }
     }

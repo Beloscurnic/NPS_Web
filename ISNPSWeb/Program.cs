@@ -46,7 +46,7 @@ namespace ISNPSWeb
 
                 services.AddHttpContextAccessor();
                 services.AddDataProtection();
-
+           
                 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {

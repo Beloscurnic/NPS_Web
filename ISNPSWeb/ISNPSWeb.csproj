@@ -40,9 +40,5 @@
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\js\Pages\Account\" />
-  </ItemGroup>
   
 </Project>

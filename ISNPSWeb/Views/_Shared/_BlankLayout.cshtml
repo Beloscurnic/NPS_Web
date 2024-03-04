@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    @await Html.PartialAsync("~/Views/_Shared/DevExtreme/_DevExtremeStyle.cshtml")
+    @await Html.PartialAsync("~/Views/_Shared/DevExtreme/_DevExtremeScripts.cshtml")
+
+    @await Html.PartialAsync("~/Views/_Shared/Meta/_Blank/_Title_Meta.cshtml")
+    @await Html.PartialAsync("~/Views/_Shared/Meta/_Blank/_Head_Css.cshtml")
+
+
+</head>
+
+<body class="authentication-bg">
+    @await Html.PartialAsync("~/Views/_Shared/StylesBar/_Modals.cshtml")
+
+    <!-- Begin page -->
+    @RenderBody()
+    <!-- END layout-wrapper -->
+   
+
+    @RenderSection("scripts", required: false)
+    @await Html.PartialAsync("~/Views/_Shared/Meta/_Blank/_Vendor_Scripts.cshtml")
+
+
+</body>
+</html>
