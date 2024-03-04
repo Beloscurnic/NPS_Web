@@ -55,7 +55,7 @@ namespace Application.Requests.Queries.Delet_QuestionVariant
                 catch (Exception ex)
                 {
                     ResponseModel baseResponse = new ResponseModel()
-                    {
+    {
                         ErrorCode = 143,
                         ErrorMessage = ex.Message,
                     };
