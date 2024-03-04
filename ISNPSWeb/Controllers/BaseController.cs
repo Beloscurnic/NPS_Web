@@ -8,6 +8,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Domain;
 using ISNPSWeb.Models;
+using Microsoft.AspNetCore.Localization;
+using System.Threading;
 
 namespace ISNPSWeb.Controllers
 {
@@ -19,6 +21,22 @@ namespace ISNPSWeb.Controllers
 
         public static string refreshedToken = "";
 
+
+        public string GetLanguageCookie()
+        {
+            var cookie = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (cookie == null)
+            {
+                return "ru";
+            }
+            else
+            {
+                var c_uic = cookie.Split('|');
+                var culture = c_uic[0].Split("=");
+
+                return culture[1];
+            }
+        }
         [AllowAnonymous]
         public async Task<UserClaim> GetUserClaims()
         {
@@ -74,10 +92,9 @@ namespace ISNPSWeb.Controllers
 
         public string GetToken()
         {
-            MutexToken.Mutex.WaitOne();
             try
             {
-
+                MutexToken.Mutex.WaitOne();
                 var claimPrincipal = User as ClaimsPrincipal;
                 var claimIdentity = claimPrincipal.Identity as ClaimsIdentity;
 

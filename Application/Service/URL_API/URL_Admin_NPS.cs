@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Domain.Enums;
 
 namespace Application.Service.URL_API
 {
@@ -22,6 +23,18 @@ namespace Application.Service.URL_API
         public string RefreshToken(string Token)
         {
             return "/ISAuthService/json/RefreshToken?Token=" + Token;
+        }
+
+        //GET
+        public string Security_GetPermission(string Token)
+        {
+            return "/ISAdminWebAppService/json/Security/GetPermission?Token=" + Token;
+        }
+
+        //GET
+        public string ChangeUILanguage(string Token, int Language)
+        {
+            return "/ISAuthService/json/ChangeUILanguage?Token=" + Token + "&Language=" + Language;
         }
         #region LinceseController
         //GET
@@ -49,7 +62,7 @@ namespace Application.Service.URL_API
         }
 
         //PUT
-        public string Update_Lincense_Status()
+        public string Update_Lincense_Status(Guid id_Lincesne, LicenseStatus status, string token)
         {
             return domen + "/Lincense/Update_Lincense_Status";
         }
@@ -139,7 +152,7 @@ namespace Application.Service.URL_API
         }
 
         //PUT
-        public string Update_Status_Question(int QuestionID)
+        public string Update_Status_Question(int QuestionID, Status_Question status_Question, string token)
         {
             return $"{domen}/Question/Update_Status_Question?QuestionID={QuestionID}";
         }

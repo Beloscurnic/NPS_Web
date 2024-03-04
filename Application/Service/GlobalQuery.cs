@@ -13,7 +13,7 @@ namespace Application.Service
     public class GlobalQuery
     {
         //TODO
-        private string BaseURI = "";
+        private string BaseURI = "https://dev.edi.md";
 
         public string Get(QueryDataGet queryData)
         {

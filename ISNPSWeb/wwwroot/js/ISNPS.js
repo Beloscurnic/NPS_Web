@@ -178,4 +178,49 @@ var ISNPS = {
         });
     },
 
+    ajaxCultureGET: function (url) {
+        $.ajax({
+            url: url,
+            cache: false,
+            type: "GET",
+            dataType: "html",
+            statusCode: {
+                302: function (data) {
+                    window.location.href = '/Account/Logout/';
+                }
+            },
+            success: function (result) {
+                ISNPS.GETCultureResponse(result);
+            }
+        });
+
+    },
+    GETCultureResponse: function (result) {
+        var replacedText = ISNPS.IsJSON(result);
+        if (ISNPS.IsJSON(result)) {
+            result = ISNPS.ParseJSON(result);        
+                if (result.Result == 1)
+                {
+                    //сохранение путь текущего URL
+                    var drawUrl = window.location.pathname;
+                    if (drawUrl == "/Account/LockScreen") {
+                        window.location.href = '/Account/LockScreen';
+                    }
+                    else
+                    {
+                        if (drawUrl == "/Account/Login") {
+                            //перезагрузка страницы
+                            window.location.reload();
+                        }
+                        else {
+                            //заменяет все вхождения символа "/" в drawUrl на символ "_" 
+                            var replacedText = drawUrl.replace(/\//g, "_");
+                            //перенаправление на новый URL
+                            window.location.href = "/Redirect/Home/Home/" + replacedText;
+                        }
+                    }           
+                }
+        }
+    },
+
 }
