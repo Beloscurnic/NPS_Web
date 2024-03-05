@@ -9,6 +9,11 @@ namespace Application.Service.URL_API
     public class URL_User_NPS
     {
         private static string domen = "";
+        
+        public string Get_Credential()
+        {
+            return "";
+        }
 
         #region Respons
         //GET
@@ -19,6 +24,11 @@ namespace Application.Service.URL_API
 
         //GET
         public string GetResponse(int Response_ID, string token)
+        {
+            return $"{domen}/Respons/GetResponse?token={token}&Response_ID={Response_ID}";
+        }
+
+        public string Get_Statistika(int Response_ID, string token)
         {
             return $"{domen}/Respons/GetResponse?token={token}&Response_ID={Response_ID}";
         }
@@ -34,6 +44,8 @@ namespace Application.Service.URL_API
         {
             return $"{domen}/Respons/Delete_Response?token={token}&Response_ID={Response_ID}";
         }
+
+
         #endregion
 
         #region Answert
