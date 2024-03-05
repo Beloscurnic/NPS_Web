@@ -15,6 +15,14 @@ using Application.Service.URL_API;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Application.Requests.Commands.Add_Response;
+using Application.Requests.Commands.AddLincense;
+using Application.Requests.Commands.Upsert_GroupQuestionnaire;
+using Application.Requests.Commands.Upsert_Oprostnik;
+using Application.Requests.Commands.Upsert_Question;
+using Application.Requests.Commands.Upsert_QuestionVariant;
+using Application.Requests.Queries.Update_Status_Lincense;
+using Application.Requests.Queries.Update_Status_QuestionVariant;
 namespace Application
 {
     public static class DependencyInjection
