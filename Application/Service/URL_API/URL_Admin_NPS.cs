@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -187,6 +188,18 @@ namespace Application.Service.URL_API
         public string DeleteQuestionVariant(int QuestionVariantID, int oprostnikID, string token)
         {
             return $"{domen}/QuestionVariant/DeleteQuestionVariant?token={token}&QuestionVariantID={QuestionVariantID}&oprostnikID={oprostnikID}";
+        }
+        #endregion
+
+        #region Get_Statistika
+
+        public string Get_Statistika (int idOprosnika, int QuestionID, DateTime? data_Start, DateTime? data_End, string Token)
+        {
+            return domen + $"/Creat_Statistika?Token={Token}&idOprosnika={idOprosnika}&QuestionID={QuestionID}&data_Start={data_Start}&data_End={data_End}";
+        }
+        public string Get_List_Statistika (int idOprosnika, DateTime? data_Start, DateTime? data_End, string Token)
+        {
+            return domen + $"/CreatListStatistika?Token={Token}&idOprosnika={idOprosnika}&data_Start={data_Start}&data_End={data_End}";
         }
         #endregion
     }

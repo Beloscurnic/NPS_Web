@@ -21,9 +21,8 @@ namespace Application.Requests.Commands.Upsert_QuestionVariant
         {
             public CommandValidation()
             {
-                //RuleFor(command => command.QuestionID).NotEmpty();
-                //RuleFor(command => command.TypeQuestion).NotEmpty();
-                //RuleFor(command => command.Name_Question).NotEmpty();
+                RuleFor(command => command.Name).NotEmpty();
+                RuleFor(command => command.IsDeleted).NotEmpty();
             }
         }
     }
