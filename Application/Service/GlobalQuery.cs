@@ -118,7 +118,6 @@ namespace Application.Service
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                         Convert.ToBase64String(Encoding.UTF8.GetBytes(queryData.Credentials)));
 
-
                     var response = await _httpClient.PostAsync("", requestContent);
                     response.EnsureSuccessStatusCode();
 

@@ -1,4 +1,6 @@
-﻿namespace ISNPSWeb.Models
+﻿using Application.Global_Models;
+
+namespace ISNPSWeb.Models
 {
     public class AuthorizeViewModel_DTO
     {

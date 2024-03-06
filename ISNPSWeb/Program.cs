@@ -1,5 +1,7 @@
 using Application;
+using FluentValidation;
 using FluentValidation.AspNetCore;
+using ISNPSWeb.Models.ProfileInfo;
 using ISNPSWeb.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -46,7 +48,9 @@ namespace ISNPSWeb
 
                 services.AddHttpContextAccessor();
                 services.AddDataProtection();
-           
+
+                services.AddScoped<ICurrentUserService, CurrentUserService>();
+                services.AddTransient<IValidator<ChangePassword_DTO>, Validation_ProfileInfo>();
                 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {

@@ -1,0 +1,48 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.GetProfileInfo;
+
+@model ProfileInfo_Get.View_Model
+@{
+    ViewData["Title"] = "ProfileInfo";
+}
+
+
+ <div class="profile-form">
+@*    @(Html.DevExtreme().Accordion()
+        .ID("accordion-container")
+        .Collapsible(false)
+        .Multiple(false)
+        .ItemTitleTemplate(@<text><div class="header"><h5>Profile Info</h5></div></text>)
+        .ItemTemplate(@<text>
+            <div class="accordion-item">
+                <div class="accordion-column">
+                    @(Html.TextBox("ProductName", Model.User.FirstName, new { @class = "editor" }))
+                </div>
+            </div>
+        </text>))*@
+
+
+    @(Html.DevExtreme().Accordion()
+        .ID("accordion-container")
+        .Collapsible(false)
+        .Multiple(false)
+        .ItemTitleTemplate(@<text><div class="header"><h5>Profile Info</h5></div></text>)
+        .ItemTemplate(@<text>
+            <div class="accordion-item">
+                <div class="accordion-column">
+                    @(Html.DevExtreme().TextBoxFor(m => m.User.FirstName).LabelMode(EditorLabelMode.Floating).Label("FirstName").ReadOnly(true))
+
+                </div>
+                <div class="accordion-column">
+                        @(Html.DevExtreme().TextBoxFor(m => m.User.LastName).LabelMode(EditorLabelMode.Floating).Label("LastName").ReadOnly(true))
+                </div>
+                <div class="accordion-column">
+                        @(Html.DevExtreme().TextBoxFor(m => m.User.Email).LabelMode(EditorLabelMode.Floating).Label("Email").ReadOnly(true))
+                </div>
+                <div class="accordion-column">
+                        @(Html.DevExtreme().TextBoxFor(m => m.User.PhoneNumber).LabelMode(EditorLabelMode.Floating).Label("PhoneNumber").ReadOnly(true))
+                </div>
+            </div>
+        </text>))
+ </div>

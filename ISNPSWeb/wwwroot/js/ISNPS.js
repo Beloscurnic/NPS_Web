@@ -106,20 +106,30 @@ var ISNPS = {
         });
     },
 
-    POSTResponse: function (result, modal, gridId) {
+    POSTResponse: function (result, modal, gridId)
+    {
         if (ISNPS.IsJSON(result))
         {
             result = ISNPS.ParseJSON(result);
-                ISNPS.HideModals();       
-            if (gridId) {
+            if (modal)
+            {
+                ISNPS.HideModals();
+            }
+            if (gridId)
+            {
                 $("#" + gridId).dxDataGrid("getDataSource").reload();
             }
+            if (result.ShowToast) {
+                ShowToast('success', result.Message);
+            }
+            return result;
         }
         else 
             if (modal != null)
             {
                 $(modal).html(result);           
             }
+            else $("form[name='changePassword']").html(result);
     },
 
     DrawPartialView: function (url, divId) {
@@ -195,24 +205,29 @@ var ISNPS = {
         });
 
     },
-    GETCultureResponse: function (result) {
+    GETCultureResponse: function (result)
+    {
         var replacedText = ISNPS.IsJSON(result);
-        if (ISNPS.IsJSON(result)) {
+        if (ISNPS.IsJSON(result))
+        {
             result = ISNPS.ParseJSON(result);        
                 if (result.Result == 1)
                 {
                     //сохранение путь текущего URL
                     var drawUrl = window.location.pathname;
-                    if (drawUrl == "/Account/LockScreen") {
+                    if (drawUrl == "/Account/LockScreen")
+                    {
                         window.location.href = '/Account/LockScreen';
                     }
                     else
                     {
-                        if (drawUrl == "/Account/Login") {
+                        if (drawUrl == "/Account/Login")
+                        {
                             //перезагрузка страницы
                             window.location.reload();
                         }
-                        else {
+                        else
+                        {
                             //заменяет все вхождения символа "/" в drawUrl на символ "_" 
                             var replacedText = drawUrl.replace(/\//g, "_");
                             //перенаправление на новый URL

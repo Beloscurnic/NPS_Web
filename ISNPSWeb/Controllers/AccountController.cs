@@ -1,22 +1,20 @@
 ﻿using Application.Global_Models;
+using Application.Requests.Commands.Authorize_User;
+using Application.Requests.Queries.GetProfileInfo;
+using Application.Service.Token;
 using Domain;
 using ISNPSWeb.Models;
+using ISNPSWeb.Service;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using static Domain.Enums;
-using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
-using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
-using Application.Requests.Commands.Authorize_User;
-using Newtonsoft.Json;
-using static System.Formats.Asn1.AsnWriter;
-using System.Security;
 
 namespace ISNPSWeb.Controllers
 {
@@ -24,11 +22,19 @@ namespace ISNPSWeb.Controllers
     [Route("[controller]")]
     public class AccountController : BaseController
     {
+        public static string refreshedToken = "";
+        public static object __refreshTokenLock = new object();
+        public static object __getTokenLock = new object();
+        bool __lockWasTaken = false;
         private readonly IMediator _mediator;
+        private readonly ITokenService _tokenService;
+        private readonly RefreshToken _refreshToken;
 
-        public AccountController(IMediator mediator)
+        public AccountController(IMediator mediator, ITokenService tokenService, RefreshToken refreshToken)
         {
             _mediator = mediator;
+            _tokenService = tokenService;
+            _refreshToken = refreshToken;
         }
 
         [AllowAnonymous]
@@ -79,8 +85,8 @@ namespace ISNPSWeb.Controllers
                         if (response.User != null)
                         {
                             //var groupResponse = await groupQuery.GetSecurityPermissionAsync(response.Token);
-                            var query = new Application.Requests.Queries.Get_Permission.Permissions_Get.Query { Token = response.Token};
-                            var groupResponse= await _mediator.Send(query);
+                            var query = new Application.Requests.Queries.Get_Permission.Permissions_Get.Query { Token = response.Token };
+                            var groupResponse = await _mediator.Send(query);
                             if (groupResponse.ErrorCode != EnErrorCode.NoError)
                             {
                                 ModelState.AddModelError("Password", response.ErrorMessage + ". " + "ContactAdministrator");
@@ -121,8 +127,8 @@ namespace ISNPSWeb.Controllers
 
                                     var token = response.Token;
 
-                                   var command_change = new Application.Requests.Commands.ChangeLanguage.ChangeLanguage.Command { Token = token, Lang = (int)uiLanguage };
-                                   var responseLanguage = await _mediator.Send(command_change);                               
+                                    var command_change = new Application.Requests.Commands.ChangeLanguage.ChangeLanguage.Command { Token = token, Lang = (int)uiLanguage };
+                                    var responseLanguage = await _mediator.Send(command_change);
                                 }
                             }
 
@@ -199,7 +205,7 @@ namespace ISNPSWeb.Controllers
 
                     if (response.ErrorCode == EnErrorCode.User_name_not_found_or_incorrect_Email)
                     {
-                        ModelState.AddModelError("Email", "Пользователь не найден или введен неверный пароль");
+                        ModelState.AddModelError("Email", "Пользователь не найден");
                         return PartialView("~/Views/Account/_ForgotPassword.cshtml", forgotPasswordViewModel);
                     }
                     else if (response.ErrorCode == EnErrorCode.Internal_error)
@@ -240,8 +246,6 @@ namespace ISNPSWeb.Controllers
         [HttpGet("TokenLogout")]
         public async Task<IActionResult> TokenLogout()
         {
-            //TempData["InvalidToken"] = Localization.SessionTimeout;
-
             await HttpContext.SignOutAsync();
 
             return RedirectToAction(nameof(AccountController.Login), "Account");
@@ -249,7 +253,7 @@ namespace ISNPSWeb.Controllers
 
         [AllowAnonymous]
         [HttpGet("ChangeLang")]
-        public async Task<IActionResult> ChangeLang([FromQuery]string shortLang)
+        public async Task<IActionResult> ChangeLang([FromQuery] string shortLang)
         {
             try
             {
@@ -285,5 +289,40 @@ namespace ISNPSWeb.Controllers
                 return Json(new BaseJsonResponse { Result = ExecutionResult.OK, Message = "Error" });
             }
         }
+
+        [Authorize]
+        [HttpGet("ProfileInfo_Get")]
+        public async Task<IActionResult> ProfileInfo_Get()
+        {
+            try
+            {
+                string token = GetToken();
+                var basequery = new BaseQueryModel()
+                {
+                    Token = token,
+                    _Delegat = (t) => _refreshToken.RefreshTokenClaim(t)
+                };
+                var query = new ProfileInfo_Get.Query { BaseQueryModel = basequery };
+
+                var response = await _mediator.Send(query);
+
+                if (response.ErrorCode == EnErrorCode.Expired_token)
+                {
+                    return CreateJsonLogout();
+                }
+                else if (response.ErrorCode == EnErrorCode.Invalid_token)
+                {
+                    return CreateJsonLogout();
+                }
+
+                return Json(response);
+            }
+            catch (Exception ex)
+            {
+                var jsonRespons = JsonConvert.SerializeObject(ex);
+                return new JsonResult(jsonRespons);
+            }
+        }
+
     }
 }

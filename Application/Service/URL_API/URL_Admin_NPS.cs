@@ -27,6 +27,16 @@ namespace Application.Service.URL_API
         }
 
         //GET
+        public string GetProfileInfo(string Token)
+        {
+            return "/ISAuthService/json/GetProfileInfo?Token=" + Token;
+        }
+
+        public string ChangePassword()
+        {
+            return "/ISAuthService/json/ChangePassword";
+        }
+        //GET
         public string Security_GetPermission(string Token)
         {
             return "/ISAdminWebAppService/json/Security/GetPermission?Token=" + Token;

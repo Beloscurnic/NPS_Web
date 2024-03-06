@@ -10,6 +10,7 @@ using Domain;
 using ISNPSWeb.Models;
 using Microsoft.AspNetCore.Localization;
 using System.Threading;
+using Application.Global_Models;
 
 namespace ISNPSWeb.Controllers
 {
@@ -153,6 +154,11 @@ namespace ISNPSWeb.Controllers
                 retObject = false;
                 return retObject;
             }
+        }
+
+        protected virtual IActionResult CreateJsonLogout(string message = null, bool showToast = false)
+        {
+            return Json(new BaseJsonResponse { Result = ExecutionResult.LOGOUT, Message = message, ShowToast = showToast });
         }
 
     }
